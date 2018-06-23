@@ -1,0 +1,81 @@
+#include <iostream>
+#include <bits/stdc++.h>
+
+ using namespace std;
+
+ int checkpreced(char c)
+ {
+     switch (c)
+    {
+    case '+':
+    case '-':
+        return 1;
+
+    case '*':
+    case '/':
+        return 2;
+
+    case '^':
+        return 3;
+    case '(':
+    case ')':
+        return 4;
+    }
+
+ }
+ int isOperand(char ch)
+{
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+}
+ int main()
+ {
+     int T;
+     cin>>T;
+     for(int p=0;p<T;p++)
+     {
+         stack <char> expr;
+         string str;
+         cin>>str;
+         int i=0;
+         while(str[i])
+         {
+             if(str[i]=='(')
+             {
+             expr.push(str[i]);
+
+             }
+             else if(str[i]==')')
+             {
+                 while(expr.top()!='(')
+                 {
+                     cout<<expr.top();
+                     expr.pop();
+                 }
+                 expr.pop();
+             }
+             else if(!isOperand(str[i]))
+             {
+                 if(expr.empty())
+                 expr.push(str[i]);
+
+                 else if(checkpreced(str[i])<=checkpreced(expr.top()))
+                 expr.push(str[i]);
+                 else
+                 {
+                     while(expr.empty()||checkpreced(str[i])>checkpreced(expr.top()))
+                     {
+                     cout<<expr.top();
+                     expr.pop();
+                     }
+                     expr.push(str[i]);
+                 }
+             }
+             else
+             cout<<str[i];
+             i++;
+
+         }
+         cout<<endl;
+
+     }
+ }
