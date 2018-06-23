@@ -1,0 +1,53 @@
+#include <iostream>
+using namespace std;
+
+ int ban[200];
+
+int fact( int N,int m)
+{
+    int temp=0;
+    for(int i=2;i<N;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            ban[j]=ban[j]*i+temp;
+            temp=ban[j]/10;
+            ban[j]=ban[j]%10;
+        }
+        while(temp!=0)
+        {
+            ban[m++]=temp%10;
+            temp=temp/10;
+        }
+    }
+    for(int i=m-1;i>=0;i--)
+    cout<<ban[i];
+    return m;
+}
+
+int main() {
+	// your code goes here
+
+
+	int T;
+	cin>>T;
+	
+	for(int p=0;p<T;p++)
+	{
+	    int N;
+	   cin>>N;
+	   int f=N,i=0,m=0;
+	   while(f!=0)
+	   {
+	       ban[i++]=f%10;
+	       f/=10;
+	       m++;
+	   }
+	  m=fact(N,m);
+	   cout<<endl;
+	}
+	   
+
+
+	return 0;
+}
