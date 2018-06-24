@@ -1,0 +1,82 @@
+#include <iostream>
+#include <bits/stdc++.h>
+
+ using namespace std;
+
+ void build(int node,int start,int endt,int* tree,int* a)
+ {
+     cout<<a[start]<<endl;
+     if(start==endt)
+     {
+         tree[node]=a[start];
+
+     }
+     else
+     {
+         int mid=(start+endt)/2;
+         build(2*node+1,start,mid,tree,a);
+         build(2*node+2,mid+1,endt,tree,a);
+         tree[node]=tree[2*node+1]+tree[2*node+2];
+     }
+
+
+ }
+ int sum(int l,int r,int start,int endt,int node,int *tree)
+ {
+     if(start>r||endt<l)
+     return 0;
+     else if(l<=start&&r>=endt)
+     {
+         return tree[node];
+     }
+     int mid= (start+endt)/2;
+     int p1= sum(l,r,start,mid,2*node+1,tree);
+     int p2= sum(l,r,mid+1,endt,2*node+2,tree);
+     return p1+p2;
+ }
+ void update(int idx,int node,int val,int start,int endt,int *tree,int *a)
+ {
+     if(start==endt)
+     {
+         a[idx]+=val;
+         tree[node]+=val;
+     }
+     else
+     {
+         int mid=(start+endt)/2;
+         if(start<=idx&&idx<=mid)
+            update(idx,2*node+1,val,start,mid,tree,a);
+         else
+            update(idx,2*node+2,val,mid+1,endt,tree,a);
+         tree[node]=tree[2*node+2]+tree[2*node+1];
+     }
+ }
+ int main()
+ {
+     int T;
+     cin>>T;
+     for(int p=0;p<T;p++)
+     {
+         int N;
+         cin>>N;
+int a[N],tree[2*N-1];
+         for(int i=0;i<N;i++)
+            cin>>a[i];
+         int start=0,endt=N-1,idx,node=0;
+         build(node,start,endt,tree,a);
+         for(int i=0;i<2*N-1;i++)
+            cout<<tree[i]<<" ";
+         cout<<endl;
+         int l,r,q;
+         cin>>l>>r;
+         node=0,start=0,endt=N-1;
+         int c=sum(l,r,start,endt,node,tree);
+         cout<<c<<endl;
+         int val;
+         cin>>idx>>val;
+         update(idx,node,val,start,endt,tree,a);
+         for(int i=0;i<2*N-1;i++)
+            cout<<tree[i]<<" ";
+         cout<<endl;
+     }
+ }
