@@ -1,0 +1,179 @@
+#include <iostream>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+typedef struct node
+{
+    int data;
+    struct node* left;
+    struct node* right;
+}N;
+
+//***************INSERT NODE*********************
+Node * insert(Node * root, int data) {
+        if(root==NULL)
+        {
+            Node * newnode=new Node(data);
+            return newnode;
+        }
+        if(root->data<data)
+        {
+            root->right=insert(root->right,data);
+        }
+            
+        else
+            root->left=insert(root->left,data);
+        return root;
+    }
+//****************TRAVERSALS*************
+void preOrderTraversal(N* root)
+{
+    if(root)
+    {
+        cout<<root->data<<"  ";
+        preOrderTraversal(root->left);
+        preOrderTraversal(root->right);
+    }
+}
+
+void inOrderTraversal(N* root)
+{
+    if(root)
+    {
+        inOrderTraversal(root->left);
+        cout<<root->data<<"  ";
+        inOrderTraversal(root->right);
+    }
+}
+
+void postOrderTraversal(N* root)
+{
+    if(root)
+    {
+        postOrderTraversal(root->left);
+        postOrderTraversal(root->right);
+        cout<<root->data<<"  ";
+    }
+}
+//*********************Level order traversal*****************
+void levelOrderTraversal1(N* root,int level)
+{
+    if(level==1)
+        cout<<root->data<<"  ";
+    else if(level>1)
+    {
+        levelOrderTraversal1(root->left,level-1);
+        levelOrderTraversal1(root->right,level-1);
+    }
+}
+void levelOrder2(Node* root) {
+        queue <Node*> q;
+        Node* ptr=root;
+        q.push(ptr);
+        while(!q.empty())
+        {
+            cout<<q.front()->data<<" ";
+            if(ptr->left)
+                q.push(ptr->left);
+            if(ptr->right)
+                q.push(ptr->right);
+            q.pop();
+            ptr=q.front();
+            
+        }
+    }
+//**************LEVEL OF BST******************
+int findLevel(N* root)
+{
+    if(root==NULL)
+        return 0;
+    else
+    {
+        int lH=findLevel(root->left);
+        int rH=findLevel(root->right);
+        if(lH>rH)
+            return lH+1;
+        else
+            return rH+1;
+    }
+}
+//********************mirror tree of a given Bin_tree*********************
+N* mirror(N* root)
+{
+    if(root)
+    {
+        mirror(root->left);
+        mirror(root->right);
+
+        N* temp=root->left;
+        root->left=root->right;
+        root->right=temp;
+    }
+    return root;
+
+}
+//***************diameter************************************************
+int findDiameter(N* root)
+{
+
+    if(!root)
+        return 0;
+    int lH=findLevel(root->left);
+    int rH=findLevel(root->right);
+
+    int ldia=findDiameter(root->left);
+    int rdia=findDiameter(root->right);
+    return max(lH+rH+1,max(ldia,rdia));
+}
+//***********************check if it is BST******************************
+Node* prev=NULL;
+bool checkBST(Node* root) {
+        
+		if(root)
+        {
+        if(!checkBST(root->left))
+           return false;
+        
+        if(root&&prev&&root->data<=prev->data)
+            return false;
+        prev=root;
+        if(!checkBST(root->right))
+          return false;
+        }
+        return true;
+        
+	}
+//**************TOP VIEW****************************************************
+void createmap(Node* root,int hd,unordered_map<int,pair<int,int>> &m,int level)
+    {
+        if(!root)
+            return;
+        else
+        {
+            if(m[hd].second==0||m[hd].first<level)
+            {
+            m[hd].first=level;
+            m[hd].second=root->data;
+            }
+            createmap(root->left,hd-1,m,level-1);
+            createmap(root->right,hd+1,m,level-1);
+        }
+    }
+
+  
+    void topView(Node * root) {
+        int hd=0;
+        int level=findLevel(root);
+        unordered_map<int,pair<int,int>> m;
+        createmap(root,hd,m,level-1);
+        unordered_map<int,pair<int,int>>:: iterator it;
+        map<int,pair<int,int>> ordered(m.begin(), m.end());
+        for(auto it = ordered.begin(); it != ordered.end(); ++it)
+        {
+            int c=(it->second).second;
+            cout<<c<<" ";
+        }
+
+    }
+    
