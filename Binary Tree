@@ -67,6 +67,7 @@ void levelOrderTraversal1(N* root,int level)
         levelOrderTraversal1(root->right,level-1);
     }
 }
+********************LEVEL ORDER TRAVERSAL USING QUEUE*************************
 void levelOrder2(Node* root) {
         queue <Node*> q;
         Node* ptr=root;
@@ -83,7 +84,7 @@ void levelOrder2(Node* root) {
             
         }
     }
-//**************LEVEL OF BST******************
+//**************LEVEL OF BST*******************************************
 int findLevel(N* root)
 {
     if(root==NULL)
@@ -144,7 +145,7 @@ bool checkBST(Node* root) {
         return true;
         
 	}
-//**************TOP VIEW****************************************************
+//***********************************TOP VIEW******************************
 void createmap(Node* root,int hd,unordered_map<int,pair<int,int>> &m,int level)
     {
         if(!root)
